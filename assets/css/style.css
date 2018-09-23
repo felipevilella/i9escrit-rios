@@ -1,0 +1,23 @@
+*{
+	margin: 0px;
+	border: 0px;
+}
+body{
+	background-color: #e2e2e2;
+}
+#logo{
+	width: 70%;
+}
+.titulo{
+	position: relative;
+	padding-top: 0px; 
+}
+.pesquisa{
+	position: relative;
+	padding-top: 120px;
+	padding-left: 250px;
+}
+.hidden{
+	display: none;
+	visibility: hidden;
+}
