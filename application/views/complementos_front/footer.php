@@ -9,6 +9,9 @@
             </div>
             <div class="modal-body"> 
                 <div class="row">
+                     <div class="col-md-12">
+                       <label class="mensagem" id="error"></label>
+                   </div>
                     <div class="col-md-12">
                        <label>E-mail ou usuario</label>
                    </div>
@@ -39,7 +42,7 @@
         </div>
         <div class="divider"></div>
         <div class="right-side">
-            <button type="button" class="btn btn-success btn-link">Entrar</button>
+            <button type="button" id="entrar" class="btn btn-success btn-link" >Entrar</button>
         </div>
     </div>
 </div>
@@ -78,5 +81,7 @@
 <script src="<?php echo base_url('assets/js/plugins/bootstrap-datetimepicker.js');?>"></script>
 <script src="<?php echo base_url('assets/js/sistema.js');?>"></script>
 </html>
-
+<script type="text/javascript">
+    var  base_url ='';
+</script>
 </html>

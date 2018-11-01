@@ -6,12 +6,12 @@
     <link rel="icon" type="image/png" href="assets/img/favicon.ico">
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title> I9 Escritorios</title>
+    <title> I9 Escritorios</title>
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
 
-	<link href="<?php echo base_url('assets/css/bootstrap.min.css');?>" rel="stylesheet" />
-	<link href="<?php echo base_url('assets/css/paper-kit.css?v=2.1.0');?>" rel="stylesheet"/>
+    <link href="<?php echo base_url('assets/css/bootstrap.min.css');?>" rel="stylesheet" />
+    <link href="<?php echo base_url('assets/css/paper-kit.css?v=2.1.0');?>" rel="stylesheet"/>
 
     <link href="<?php echo ('http://fonts.googleapis.com/css?family=Montserrat:400,300,700')?>"; rel='stylesheet' type='text/css'>
     <link href="<?php echo ('http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css')?>" rel="stylesheet">
@@ -19,7 +19,7 @@
     <link href="<?php echo base_url('assets/css/style.css');?>" rel="stylesheet" />
 </head>
 <body>
-	   <nav class="navbar navbar-expand-md fixed-top">
+    <nav class="navbar navbar-expand-md fixed-top">
         <div class="container">
             <div class="navbar-translate">
                 <button class="navbar-toggler navbar-toggler-right navbar-burger" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,25 +32,37 @@
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav ml-auto">                
                     <li class="nav-item">
-                        <a href=""  class="nav-link">APRESENTAÇÃO</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#programaeprojeto"  class="nav-link" id="">PROGRAMAS E PROJETOS</a>
+                        <a href="<?php echo base_url("menu"); ?>"  class="nav-link">Olá <?php echo $nome; ?></a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="#agendaeeventos"  class="nav-link" id="">AGENDA E EVENTOS</a>
-                    </li>
+                        <?php
+                        if($email == "admin@i9escritorios.com.br"){
+                           echo "<a href='".base_url('')."' class='nav-link'>FORMULARIO DE INSCRIÇÃO </a>";
+                            }
+                       else{
+                         echo "<a href='".base_url('')."'class='nav-link'>CADASTRAR PROJETOS PROJETOS </a>";
+                        } 
 
-                    <li class="nav-item">
-                        <a href="<?php echo base_url("vitrine_tecnologica"); ?>"  class="nav-link">VITRINE TECNOLOGICA</a>
-                    </li>
+                     ?>
+                 </li>
 
-                    <li class="nav-item">
-                        <a href="#"  data-toggle="modal" data-target="#myModal" class="nav-link">ACESSSO</a>
-                    </li>
-                </ul>
-            </div>
+                 <li class="nav-item">
+                     <?php
+                        if($email == "admin@i9escritorios.com.br"){
+                           echo "<a href='".base_url('')."' class='nav-link'> APROVAR EVENTOS </a>";
+                            }
+                       else{
+                         echo "<a href='".base_url('')."'class='nav-link'>CADASTRAR EVENTOS </a>";
+                        } 
+
+                     ?></li>
+
+                <li class="nav-item">
+                    <a href="<?php echo base_url("inicio"); ?>" class="nav-link">Sair</a>
+                </li>
+            </ul>
         </div>
-    </nav>
- 
+    </div>
+</nav>
+
