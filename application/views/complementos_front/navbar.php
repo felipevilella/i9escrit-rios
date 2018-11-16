@@ -27,7 +27,7 @@
                     <span class="navbar-toggler-bar"></span>
                     <span class="navbar-toggler-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo base_url("inicio"); ?>" id="logo"><img src="<?php echo('assets/imagens/logo.png');?>"></a>
+                <a class="navbar-brand" href="<?php echo base_url("inicio"); ?>" id="logo"><img src="<?php echo base_url('assets/imagens/logo.png');?>"></a>
             </div>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav ml-auto">                

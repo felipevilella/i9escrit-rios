@@ -117,16 +117,18 @@ $("#obetivoprojeto").on("input",function(){
 });
 
 $("#Programa").on("click",function(){
-	$("#modalprojeto").modal();
+	var id = $("#idprojeto").val();
+	window.location.href = "vervitrine/"+id;
 });
 $("#Visualizarprojeto").on("click",function(){
-	window.location.href = "verprojeto";
+	
 });
 $("#evento").on("click",function(){
 	$("#modalprojeto").modal();
 });
 $("#vitrine").on("click",function(){
-	window.location.href = "vervitrine";
+	var id = $("#idvitrine").val();
+	window.location.href = "vervitrine/"+id;
 });
 $("#descricao").on("input",function(){
 	var descricao = $(this).val();
@@ -157,9 +159,119 @@ $("#entrar").on("click",function(){
 			$(".mensagem").html(data.mensagem);
 			if(data.confirmado == "ok"){
 				window.location.href = "menu";
+
 			}
 		}
 		
 	});
 
-})		
+});
+$("#visualizar").on("click",function(){
+	var id= $("#idProjeto").val();
+	window.location.href = base_url+"visualizarprojeto/"+id;
+});
+$("#visualizarevento").on("click",function(){
+	var id= $("#idevento").val();
+	window.location.href = base_url+"visualizarevento/"+id;
+});
+$("#confirmarevento").on("click",function(){
+	var id = $("#id").val();
+	$.ajax({
+		type:"post",
+		url: base_url+"aprovarevento",
+		dataType:'Json',
+		data:{
+			idevento: id
+		},
+		error:function(data){
+			alert("Evento aprovado com sucesso");
+			window.location.href = base_url+"eventospendentes";
+		}
+	});
+});
+$("#Recusarevento").on("click",function(){
+	var id = $("#id").val();
+	$.ajax({
+		type:"post",
+		url: base_url+"reprovarevento",
+		dataType:'Json',
+		data:{
+			idevento: id
+		},
+		error:function(data){
+			alert("Evento reprovado  com sucesso");
+			window.location.href = base_url+"eventospendentes";
+		}
+	});
+});
+$("#confirmarprojeto").on("click",function(){
+	var id = $("#id").val();
+	$.ajax({
+		type:"post",
+		url: base_url+"aprovarprojeto",
+		dataType:'Json',
+		data:{
+			idprojeto: id
+		},
+		error:function(data){
+			alert("Projeto aprovado com sucesso");
+			window.location.href = base_url+"projetospendentes";
+		}
+	});
+});
+$("#Recusarprojeto").on("click",function(){
+	var id = $("#id").val();
+	$.ajax({
+		type:"post",
+		url: base_url+"reprovarprojeto",
+		dataType:'Json',
+		data:{
+			idprojeto: id
+		},
+		error:function(data){
+			alert("Projeto reprovado com sucesso");
+			window.location.href = base_url+"projetospendentes";
+		}
+	});
+});
+$("#pesquisa").on("input",function(){
+	$("#informacao").html("pesquisando...");
+	var informacao = $("#pesquisa").val();
+	$.ajax({
+		url: base_url+"buscarvitrine",
+		type:'post',
+		dataType:'Json',
+		data:{
+			pesquisaDados:informacao
+		},
+		success:function(data){
+			if(data.retorno == "vazio"){
+
+			}
+			else{
+				console.log(data);
+				$("#painelvitrine").html("");
+				for(var i = 0; i<data.retorno.length;i++){
+					$("#painelvitrine").append(
+						"<div class='col-12 col-sm-12 col-md-4'>"+
+						"<div class='card' style='width: 20rem;'>"+
+						"<input type='hidden' id='idvitrine' value='"+data.retorno[i].idProjeto+"''>"+
+						"<a href='#'' id='vitrine'><img class='card-img-top' src='assets/foto_projeto/"+data.retorno[i].caminho_foto+"' alt='Card image cap'></a>"+
+						"<div class='card-body'>"+
+						"<p class='card-text'>"+data.retorno[i].descricao+"</p>"+
+						"</div></div></div>");
+
+				}
+			}
+
+		}
+	});
+});
+$("#visualizareventousuario").on("click",function(){
+	var id= $("#idevento").val();
+	window.location.href = base_url+"vereventousuario/"+id;
+});
+$("#visualizarprojetousuario").on("click",function(){
+	var id= $("#idProjeto").val();
+	window.location.href = base_url+"meusprojetos/"+id;
+});

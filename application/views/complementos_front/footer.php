@@ -82,6 +82,6 @@
 <script src="<?php echo base_url('assets/js/sistema.js');?>"></script>
 </html>
 <script type="text/javascript">
-    var  base_url ='';
+    var  base_url = "<?php echo base_url(); ?>";
 </script>
 </html>

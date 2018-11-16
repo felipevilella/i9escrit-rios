@@ -11,6 +11,345 @@ class Formulario_controller extends CI_Controller {
 		$this->load->view("complementos_front/footer");
 		$this->load->model("formulario_model");
 	}
+	public function cadastrar_projeto_usuario(){
+		$this->load->library('form_validation');
+		$this->load->helper('url');
+		$this->load->library('session');
+		$this->load->model("projetos_model");
+
+		$dados["email"] = $this->session->usuario_session;
+		$dados["nome"] = $this->session->nome_session;
+		if(empty($dados["email"])){
+			redirect(base_url('inicio'), 'refresh');
+		}
+		else{
+			$this->load->view("complementos_front/navbar_usuario",$dados);
+			$this->load->view("estrutura_site/cadastro_projeto_usuario");
+			$this->load->view("complementos_front/footer");
+			$this->load->model("formulario_model");
+		}
+	}
+	public function enviarDadosprojeto(){
+		$this->load->library('form_validation');
+		$this->load->helper('url');
+		$this->load->helper('file');
+		$this->load->model("formulario_model");
+
+		$this->load->library('session');
+		$this->load->model("projetos_model");
+
+		$dados["email"] = $this->session->usuario_session;
+		$dados["nome"] = $this->session->nome_session;
+
+		$dados["completo"]="";
+
+		 //VALIDACAO DOS CAMPOs
+		$this->form_validation->set_rules("nomeprojeto","nome projeto","required|min_length[3]");
+		$this->form_validation->set_rules("quantidade","quantidade integrantes","required");
+		$this->form_validation->set_rules("video","video",'required');
+		$this->form_validation->set_rules("data_i","data","required");
+		$this->form_validation->set_rules("descricao","descricao","required|min_length[20]|max_length[400]");
+		$this->form_validation->set_rules("objetivo","objetivo","required|min_length[20]|max_length[500]");
+		$this->form_validation->set_rules("categoria","categoria","required");
+		$this->form_validation->set_rules("quantidadefotos","quantidade","required");
+		$this->form_validation->set_rules("estagio","estagio","required");
+
+		 //validando nome do usuario e email por quantidade
+		if($this->input->post("quantidade") == 2){
+
+		
+			$this->form_validation->set_rules("nome1","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email1","e-mail","required|valid_email");
+		}
+		if($this->input->post("quantidade") == 3){
+
+			
+			$this->form_validation->set_rules("nome1","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email1","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome2","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email2","e-mail","required|valid_email");
+		}
+		if($this->input->post("quantidade") == 4){
+
+			
+			$this->form_validation->set_rules("nome1","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email1","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome2","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email2","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome3","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email3","e-mail","required|valid_email");
+
+		}
+		if($this->input->post("quantidade") == 5){
+
+			
+			$this->form_validation->set_rules("nome1","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email1","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome2","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email2","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome3","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email3","e-mail","required|valid_email");
+			$this->form_validation->set_rules("nome4","nome","required|min_length[3]");
+			$this->form_validation->set_rules("email4","e-mail","required|valid_email");
+
+		}
+
+
+	
+		$idusuario = $this->session->idusuario_session;
+
+
+
+
+		if($this->form_validation->run() == false){
+			$this->form_validation->error_array();
+			print_r($this->form_validation->error_array());
+		}
+		else{
+
+			$config['upload_path'] = './assets/foto_projeto/';
+			$config['allowed_types'] = 'gif|jpg|png';
+			$config['max_size']     = '1400';
+			$config['max_width'] = '1424';
+			$config['max_height'] = '900';
+
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+
+			$projeto = array(
+				"nome"=>$this->input->post("nomeprojeto"),
+				"categoria"=>$this->input->post("categoria"),
+				"palavrachave"=>$this->input->post("palavrachave"),
+				"data"=>$this->input->post("data_i"),
+				"descricao"=>$this->input->post("descricao"),
+				"objetivo"=>$this->input->post("objetivo"),
+				'fk_idUsuario'=>$idusuario
+			);
+			$this->formulario_model->cadastro_projeto($projeto);
+			$dadosprojeto = $this->formulario_model->selecionar_ultimo_projeto();
+			if($this->input->post("quantidade") == 2){
+				
+				$integrantes1 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->session->nome_session ,
+					'email' =>  $this->session->usuario_session);
+				$this->formulario_model->cadastro_integrantes($integrantes1);
+				
+				$integrantes2 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome1') ,
+					'email' => $this->input->post('email1'));
+				$this->formulario_model->cadastro_integrantes($integrantes2);
+			}
+
+
+			if($this->input->post("quantidade") == 3){
+				
+				$integrantes1 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->session->nome_session ,
+					'email' =>  $this->session->usuario_session);
+				$this->formulario_model->cadastro_integrantes($integrantes1);
+				
+				$integrantes2 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome1') ,
+					'email' => $this->input->post('email1'));
+				$this->formulario_model->cadastro_integrantes($integrantes2);
+
+
+				$integrantes3 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome2') ,
+					'email' => $this->input->post('email2'));
+				$this->formulario_model->cadastro_integrantes($integrantes3);
+			}
+
+			if($this->input->post("quantidade") == 4){
+				
+				$integrantes1 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->session->nome_session ,
+					'email' =>  $this->session->usuario_session);
+				$this->formulario_model->cadastro_integrantes($integrantes1);
+				
+				$integrantes2 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome1') ,
+					'email' => $this->input->post('email1'));
+				$this->formulario_model->cadastro_integrantes($integrantes2);
+
+
+				$integrantes3 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome2') ,
+					'email' => $this->input->post('email2'));
+				$this->formulario_model->cadastro_integrantes($integrantes3);
+
+				$integrantes4 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome3') ,
+					'email' => $this->input->post('email3'));
+				$this->formulario_model->cadastro_integrantes($integrantes4);
+
+				$integrantes5 = array(
+					'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+					'nome' =>$this->input->post('nome4') ,
+					'email' => $this->input->post('email4'));
+				$this->formulario_model->cadastro_integrantes($integrantes5);
+			}
+
+			$video = array(
+				'fk_idProjeto' =>$dadosprojeto['idProjeto'],
+				'urlvideo' => $this->input->post('video')
+			);
+			$this->formulario_model->cadastro_video($video);
+
+
+			if($this->input->post("quantidadefotos") == 2){	
+				if ($this->upload->do_upload('foto0')){
+					
+					$name0 = $this->upload->data();
+					$foto0 =array(
+						'caminho_foto' => $name0['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+						
+					);
+					$this->formulario_model->cadastro_foto($foto0);
+				}
+				else
+					echo $this->upload->display_errors();
+
+				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
+					$foto1 =array(
+						'caminho_foto' => $name1['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto1);
+				}
+				
+				else
+					echo $this->upload->display_errors();
+				
+				
+			}
+			if($this->input->post("quantidadefotos") == 3){	
+				if ($this->upload->do_upload('foto0')){
+					echo 'Arquivo salvo com sucesso.';
+					$name0 = $this->upload->data();
+					$foto0 =array(
+						'caminho_foto' => $name0['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+						
+					);
+					$this->formulario_model->cadastro_foto($foto0);
+				}
+				else
+					echo $this->upload->display_errors();
+
+				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
+					$foto1 =array(
+						'caminho_foto' => $name1['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto1);
+					echo 'Arquivo salvo com sucesso.';
+				}
+				
+				else
+					echo $this->upload->display_errors();
+
+				if ($this->upload->do_upload('foto2')){
+					$name2 = $this->upload->data();
+					$foto2 =array(
+						'caminho_foto' => $name2['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto2);
+					echo 'Arquivo salvo com sucesso.';
+				}
+				
+				else
+					echo $this->upload->display_errors();
+				
+				
+			}
+			if($this->input->post("quantidadefotos") == 4){	
+				if ($this->upload->do_upload('foto0')){
+					echo 'Arquivo salvo com sucesso.';
+					$name0 = $this->upload->data();
+					$foto0 =array(
+						'caminho_foto' => $name0['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+						
+					);
+					$this->formulario_model->cadastro_foto($foto0);
+				}
+				else
+					echo $this->upload->display_errors();
+
+				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
+					$foto1 =array(
+						'caminho_foto' => $name1['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto1);
+					echo 'Arquivo salvo com sucesso.';
+				}
+				
+				else
+					echo $this->upload->display_errors();
+
+				if ($this->upload->do_upload('foto2')){
+					$name2 = $this->upload->data();
+					$foto2 =array(
+						'caminho_foto' => $name2['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto2);
+					echo 'Arquivo salvo com sucesso.';
+				}
+				
+				else
+					echo $this->upload->display_errors();
+
+
+				if ($this->upload->do_upload('foto3')){
+					$name3 = $this->upload->data();
+					$foto3 =array(
+						'caminho_foto' => $name3['file_name'],
+						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
+
+					);
+					$this->formulario_model->cadastro_foto($foto3);
+					echo 'Arquivo salvo com sucesso.';
+				}
+				
+				else
+					echo $this->upload->display_errors();
+				
+
+			}
+
+
+
+			$dados["completo"] = " Projeto cadastrado com sucesso";
+
+		}
+		$this->load->view("complementos_front/navbar_usuario",$dados);
+		$this->load->view("estrutura_site/cadastro_projeto_usuario");
+		$this->load->view("complementos_front/footer");
+		$this->load->model("formulario_model");
+	}
 	public function cadastro_formulario(){
 		$this->load->library('form_validation');
 		$this->load->helper('url');
@@ -74,30 +413,21 @@ class Formulario_controller extends CI_Controller {
 
 		}
 
-		// if($this->input->post("quantidadefotos") == 2){
 
-		// 	$this->form_validation->set_rules("foto0","foto","callback_file_check");
-		// 	$this->form_validation->set_rules("foto1","foto","callback_file_check");
-		// }
-		// if($this->input->post("quantidadefotos") == 3){ 
-
-		// 	$this->form_validation->set_rules("foto0","foto","required");
-		// 	$this->form_validation->set_rules("foto1","foto","required");
-		// 	$this->form_validation->set_rules("foto2","foto","required");
-		// }
-		// if($this->input->post("quantidadefotos") == 4){
-
-		// 	$this->form_validation->set_rules("foto0","foto","required");
-		// 	$this->form_validation->set_rules("foto1","foto","required");
-		// 	$this->form_validation->set_rules("foto2","foto","required");
-		// 	$this->form_validation->set_rules("foto3","foto","required");
-		// }
-
+		$usuario = array(
+			'nome' =>$this->input->post('nome0') ,
+			'usuario' => $this->input->post('email0'),
+			'senha' => md5("@alterarsenha123"),
+			'prioriedade' =>'usuario'
+		);
+		$idusuario = $this->formulario_model->selecionar_ultimo_usuario();
+		$this->formulario_model->cadastro_usuario($usuario);
 
 
 
 		if($this->form_validation->run() == false){
 			$this->form_validation->error_array();
+			print_r($this->form_validation->error_array());
 		}
 		else{
 
@@ -117,7 +447,8 @@ class Formulario_controller extends CI_Controller {
 				"palavrachave"=>$this->input->post("palavrachave"),
 				"data"=>$this->input->post("data_i"),
 				"descricao"=>$this->input->post("descricao"),
-				"objetivo"=>$this->input->post("objetivo")
+				"objetivo"=>$this->input->post("objetivo"),
+				'fk_idUsuario'=>$idusuario["idUsuario"]
 			);
 			$this->formulario_model->cadastro_projeto($projeto);
 			$dadosprojeto = $this->formulario_model->selecionar_ultimo_projeto();
@@ -204,9 +535,9 @@ class Formulario_controller extends CI_Controller {
 			if($this->input->post("quantidadefotos") == 2){	
 				if ($this->upload->do_upload('foto0')){
 					
-					$name = $this->upload->data();
+					$name0 = $this->upload->data();
 					$foto0 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name0['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 						
 					);
@@ -216,8 +547,9 @@ class Formulario_controller extends CI_Controller {
 					echo $this->upload->display_errors();
 
 				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
 					$foto1 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name1['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -232,9 +564,9 @@ class Formulario_controller extends CI_Controller {
 			if($this->input->post("quantidadefotos") == 3){	
 				if ($this->upload->do_upload('foto0')){
 					echo 'Arquivo salvo com sucesso.';
-					$name = $this->upload->data();
+					$name0 = $this->upload->data();
 					$foto0 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name0['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 						
 					);
@@ -244,8 +576,9 @@ class Formulario_controller extends CI_Controller {
 					echo $this->upload->display_errors();
 
 				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
 					$foto1 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name1['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -257,8 +590,9 @@ class Formulario_controller extends CI_Controller {
 					echo $this->upload->display_errors();
 
 				if ($this->upload->do_upload('foto2')){
+					$name2 = $this->upload->data();
 					$foto2 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name2['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -274,9 +608,9 @@ class Formulario_controller extends CI_Controller {
 			if($this->input->post("quantidadefotos") == 4){	
 				if ($this->upload->do_upload('foto0')){
 					echo 'Arquivo salvo com sucesso.';
-					$name = $this->upload->data();
+					$name0 = $this->upload->data();
 					$foto0 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name0['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 						
 					);
@@ -286,8 +620,9 @@ class Formulario_controller extends CI_Controller {
 					echo $this->upload->display_errors();
 
 				if ($this->upload->do_upload('foto1')){
+					$name1 = $this->upload->data();
 					$foto1 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name1['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -299,8 +634,9 @@ class Formulario_controller extends CI_Controller {
 					echo $this->upload->display_errors();
 
 				if ($this->upload->do_upload('foto2')){
+					$name2 = $this->upload->data();
 					$foto2 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name2['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -313,8 +649,9 @@ class Formulario_controller extends CI_Controller {
 
 
 				if ($this->upload->do_upload('foto3')){
+					$name3 = $this->upload->data();
 					$foto3 =array(
-						'caminho_foto' => $name['file_name'],
+						'caminho_foto' => $name3['file_name'],
 						'fk_idProjeto'=>$dadosprojeto['idProjeto'],
 
 					);
@@ -328,14 +665,7 @@ class Formulario_controller extends CI_Controller {
 
 			}
 
-			$usuario = array(
-				'nome' =>$this->input->post('nome0') ,
-				'usuario' => $this->input->post('email0'),
-				'senha' => md5("@alterarsenha123"),
-				'prioriedade' =>'usuario'
-			);
-			$this->formulario_model->cadastro_usuario($usuario);
-
+			
 			/* dados de envio para o email*/
 			/*
 			$assunto="Dados de acesso I9 escritorios";
@@ -368,9 +698,9 @@ class Formulario_controller extends CI_Controller {
         $dados["completo"] = " Projeto cadastrado com sucesso, e-mail enviado para".$this->input->post('email0').".";
 
     }
-    	$this->load->view("complementos_front/navbar2",$dados);
-		$this->load->view("estrutura_site/formulario_inscricao");
-		$this->load->view("complementos_front/footer");
-		$this->load->model("formulario_model");
+    $this->load->view("complementos_front/navbar2",$dados);
+    $this->load->view("estrutura_site/formulario_inscricao");
+    $this->load->view("complementos_front/footer");
+    $this->load->model("formulario_model");
 }
 }

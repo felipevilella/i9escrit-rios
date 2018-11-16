@@ -13,8 +13,8 @@
 	<link href="<?php echo base_url('assets/css/bootstrap.min.css');?>" rel="stylesheet" />
 	<link href="<?php echo base_url('assets/css/paper-kit.css?v=2.1.0');?>" rel="stylesheet"/>
 
-    <link href="<?php echo ('http://fonts.googleapis.com/css?family=Montserrat:400,300,700')?>"; rel='stylesheet' type='text/css'>
-    <link href="<?php echo ('http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('http://fonts.googleapis.com/css?family=Montserrat:400,300,700')?>"; rel='stylesheet' type='text/css'>
+    <link href="<?php echo base_url('http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css')?>" rel="stylesheet">
     <link href="<?php echo base_url('assets/css/nucleo-icons.css');?>" rel="stylesheet" />
     <link href="<?php echo base_url('assets/css/style.css');?>" rel="stylesheet" />
 </head>
@@ -27,7 +27,7 @@
                     <span class="navbar-toggler-bar"></span>
                     <span class="navbar-toggler-bar"></span>
                 </button>
-                <a class="navbar-brand" href="<?php echo base_url("inicio"); ?>" id="logo"><img src="<?php echo('assets/imagens/logo.png');?>"></a>
+                <a class="navbar-brand" href="<?php echo base_url("inicio"); ?>" id="logo"><img src="<?php echo base_url('assets/imagens/logo.png');?>"></a>
             </div>
             <div class="collapse navbar-collapse" id="navbarToggler">
                 <ul class="navbar-nav ml-auto">                

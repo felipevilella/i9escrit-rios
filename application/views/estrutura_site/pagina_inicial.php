@@ -5,49 +5,71 @@
 	</div>
 </div>
 <div class="container">
-	<div class="tim-title"  id="programaeprojeto">>
+	<div class="tim-title"  id="programaeprojeto">
 		<blockquote class="blockquote">
-			<p class="mb-0"<h5>
+			<p class="mb-0"><h5>
 				Programas e projetos
 			</h5></p>
 		</blockquote>
 	</div>
 	<div class="row">
+		<?php foreach ($programaeprojetos as $key => $programaeprojetos):
+
+			echo "<input type='hidden' id='idprojeto' value='".$programaeprojetos["idProjeto"]."'>";
+
+		 ?>	
 		<div class="col-12 col-sm-12 col-md-4">
-			<a href="#" id="Programa"><img src="<?php echo('assets/imagens/imagem1.jpg');?>"  class="img-thumbnail img-responsive" alt="Rounded Image"></a>
+			<?php
+		echo "<a href='#'' id='Programa'><img src='assets/foto_projeto/".$programaeprojetos["caminho_foto"]."'  class='img-thumbnail img-responsive' alt='Rounded Image'></a>";
+		?>
 		</div>
+		<?php endforeach ?>
+			
 		<div class="col-12 col-sm-12 col-md-4">
 			<img src="<?php echo('assets/imagens/imagem.jpg');?>" class="img-thumbnail img-responsive" alt="Rounded Image">
 		</div>
-		<div class="col-12 col-sm-12 col-md-4">
-			<img src="<?php echo('assets/imagens/imagem.jpg');?>" class="img-thumbnail img-responsive" alt="Rounded Image">
-		</div>
+		
 	</div>
 </div>
 
 <div class="container">
 	<div class="tim-title" id="agendaeeventos">
 		<blockquote class="blockquote">
-			<p class="mb-0"><h5>
+			<p class="mb-0"><h3>
 				Eventos
 			</h5></p>
 		</blockquote>
 	</div>
 	<div class="row">
-		<div class="col-md-4">
-			<div class="card mb-3">
-				<img class="card-img-top" src="<?php echo('assets/imagens/banner-holder.png');?>" alt="Card image cap">
-				<div class="card-body">
-					<h4 class="card-title">Rio Sul Valley Conference 2018</h4>
-					<p class="card-text">O Rio Sul Valley Conference é o encontro anual para reunir empreendedores de toda a região, para troca de conhecimento, através de palestras e muito networking!.
 
-					Com um time de experts e jedis de diversos temas, vamos trazer as melhores referências da região para um dia inesquecível! </p><hr>
-					<p><b>Data: 08/10/2018<br>Horario: 13:00</b></p>
-					<p class="card-text"><small class="text-muted"><a href="https://www.sympla.com.br/rio-sul-valley-conference-2018__357313" target="_blank"><input type="button" class="btn btn-info  col-md-12" value="Visualizar"></a></small></p>
+		<?php
+		$aux=0;
+		foreach ($evento as $key => $evento): 
+			if($aux<3){
+				?>
+
+
+				<div class="col-md-4">
+					<div class="card mb-3">
+						<?php
+						echo "<img class='card-img-top' src='assets/foto_projeto/".$evento["caminho_foto"]."' alt='Card image cap'>";
+						?>
+
+						<div class="card-body">
+							<h4 class="card-title"><?php echo $evento["nome"];?></h4>
+							<p class="card-text"><?php echo $evento["descricao"];?></p><hr>
+							<p><b>Data: <?php echo $evento["data_inicio"];?><br>Horario: <?php echo $evento["horario_incio"]." as ".$evento["horario_terminio"];?></b></p>
+							<p class="card-text"><small class="text-muted"><a href="<?php echo $evento["url"];?>" target="_blank"><input type="button" class="btn btn-info  col-md-12" value="Visualizar"></a></small></p>
+						</div>
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="col-12 col-sm-12 col-md-4">
+				<?php 
+
+			} 
+			$aux++;
+			 endforeach ?>
+
+<!-- 		<div class="col-12 col-sm-12 col-md-4">
 			<div class="card mb-3">
 				<img class="card-img-top" src="<?php echo('assets/imagens/imagem.jpg');?>" alt="Card image cap">
 				<div class="card-body">
@@ -56,19 +78,8 @@
 					<p class="card-text"><small class="text-muted"><a href=""><input type="button" class="btn btn-info  col-md-12" value="Visualizar"></a></small></p>
 				</div>
 			</div>
-		</div>
-			<div class="col-12 col-sm-12 col-md-4">
-				<div class="card mb-3">
-					<img class="card-img-top" src="<?php echo('assets/imagens/imagem.jpg');?>" alt="Card image cap">
-					<div class="card-body">
-						<h4 class="card-title"></h4>
-						<p class="card-text" </p>
-						<p class="card-text"><small class="text-muted"><a href=""><input type="button" class="btn btn-info  col-md-12" value="Visualizar"></a></small></p>
-					</div>
-				</div>
-
-			</div>
-		</div>
+		</div> -->
+		
 	</div>
 </div>
 
